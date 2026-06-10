@@ -24,6 +24,12 @@ export default function LeafletMap({ quintas }: Props) {
         attribution: '© OpenStreetMap contributors',
       }).addTo(map)
 
+      map.locate({ setView: true, maxZoom: 13 })
+      map.on('locationfound', (e) => {
+        L.circle(e.latlng, { radius: e.accuracy }).addTo(map)
+      })
+      map.on('locationerror', () => {})
+
       const icon = L.icon({
         iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
         shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
