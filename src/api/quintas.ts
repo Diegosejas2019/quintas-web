@@ -25,3 +25,8 @@ export const getDisponibilidad = async (quintaId: string, mes: number, anio: num
   const { data } = await apiClient.get('/reservas/disponibilidad', { params: { quintaId, mes, anio } })
   return data
 }
+
+export const getDisponiblesEnFechas = async (fechaInicio: string, fechaFin: string): Promise<EstefindeResponse> => {
+  const { data } = await apiClient.get('/quintas/disponibles', { params: { fechaInicio, fechaFin } })
+  return data
+}
