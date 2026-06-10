@@ -78,7 +78,7 @@ export default function HomePage() {
       </div>
 
       {/* Search bar */}
-      <div className="flex items-center gap-2 bg-white border border-[#E8DDD4] rounded-2xl px-4 h-11 mb-4 shadow-sm">
+      <div className="flex items-center gap-2 bg-white rounded-2xl px-4 h-11 mb-4 shadow-sm">
         <span className="text-base">🔍</span>
         <input
           type="text"
@@ -93,7 +93,7 @@ export default function HomePage() {
       </div>
 
       {/* Filtros */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex gap-2 overflow-x-auto mb-6 pb-1" style={{ scrollbarWidth: 'none' }}>
         <ToggleChip label="🏊 Pileta"   active={pileta}   onClick={() => setPileta(v => !v)} />
         <ToggleChip label="🔥 Parrilla" active={parrilla} onClick={() => setParrilla(v => !v)} />
         <div className="w-px bg-[#E8DDD4] mx-1 self-stretch" />
