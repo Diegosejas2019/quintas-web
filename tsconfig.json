@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@quintas-shared/*": ["../../shared/*"]
+      "@quintas-shared/*": ["./src/types/*"]
     }
   },
   "include": [
