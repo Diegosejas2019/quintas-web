@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"],
+      "@quintas-shared/*": ["../../shared/*"]
     }
   },
   "include": [
