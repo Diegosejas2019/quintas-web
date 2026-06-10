@@ -49,13 +49,13 @@ export default function AlertaModal({ quintaId, onClose }: Props) {
           <div className="flex-1">
             <label className="text-xs font-bold text-[#7A6559] uppercase block mb-1.5">Fecha inicio</label>
             <input value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
-              placeholder="YYYY-MM-DD"
+              type="date"
               className="border border-[#E8DDD4] rounded-xl px-3 py-3 w-full bg-[#FAF5F0] text-sm" />
           </div>
           <div className="flex-1">
             <label className="text-xs font-bold text-[#7A6559] uppercase block mb-1.5">Fecha fin</label>
             <input value={fechaFin} onChange={e => setFechaFin(e.target.value)}
-              placeholder="YYYY-MM-DD"
+              type="date"
               className="border border-[#E8DDD4] rounded-xl px-3 py-3 w-full bg-[#FAF5F0] text-sm" />
           </div>
         </div>
