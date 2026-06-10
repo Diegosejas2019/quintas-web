@@ -49,7 +49,7 @@ export default function MisAlertasPage() {
           {alertas.map((a) => (
             <div key={a.id} className="bg-white rounded-2xl p-4 shadow-sm flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-[#4A3020]">Quinta: {a.quintaId.slice(0, 8)}…</p>
+                <p className="text-sm font-semibold text-[#4A3020]">{a.quintaNombre}</p>
                 <p className="text-xs text-[#7A6559] mt-0.5">{a.fechaInicio} → {a.fechaFin}</p>
                 <p className="text-xs mt-1">
                   <span className={`font-semibold ${a.notificado ? 'text-[#4A7C59]' : 'text-[#7A6559]'}`}>

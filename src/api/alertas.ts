@@ -3,6 +3,7 @@ import { apiClient } from './client'
 export interface Alerta {
   id: string
   quintaId: string
+  quintaNombre: string
   fechaInicio: string
   fechaFin: string
   email: string

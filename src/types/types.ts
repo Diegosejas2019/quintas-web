@@ -33,3 +33,14 @@ export interface EstefindeFilters {
   pileta?: boolean;
   parrilla?: boolean;
 }
+
+export interface Alerta {
+  id: string;
+  quintaId: string;
+  quintaNombre: string;
+  fechaInicio: string;
+  fechaFin: string;
+  email: string;
+  notificado: boolean;
+  createdAt: string;
+}

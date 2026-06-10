@@ -1,9 +1,11 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { getEsteFinde } from '@/api/quintas'
 import QuintaCard from '@/components/QuintaCard'
+import FeaturedCard from '@/components/FeaturedCard'
+import { useAuthStore } from '@/store/authStore'
 import type { EstefindeFilters } from '@quintas-shared/types'
 
 const CAPACIDADES = [
@@ -20,14 +22,16 @@ const PRECIOS = [
   { label: 'Hasta $100.000', value: 100000 },
 ]
 
-function formatFinde(viernes: string, domingo: string) {
-  const v = new Date(viernes + 'T12:00:00')
-  const d = new Date(domingo + 'T12:00:00')
-  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
-  return `${v.getDate()} al ${d.getDate()} de ${meses[d.getMonth()]}`
+function getGreeting(): string {
+  const h = new Date().getHours()
+  if (h < 12) return 'Buenos días 👋'
+  if (h < 20) return 'Buenas tardes 👋'
+  return 'Buenas noches 👋'
 }
 
 export default function HomePage() {
+  const { user } = useAuthStore()
+  const [query, setQuery]       = useState('')
   const [pileta, setPileta]     = useState(false)
   const [parrilla, setParrilla] = useState(false)
   const [capIdx, setCapIdx]     = useState(0)
@@ -45,28 +49,64 @@ export default function HomePage() {
     queryFn:  () => getEsteFinde(filters),
   })
 
+  const filteredQuintas = useMemo(() => {
+    if (!data?.quintas) return []
+    const q = query.toLowerCase().trim()
+    if (!q) return data.quintas
+    return data.quintas.filter(
+      quinta =>
+        quinta.nombre.toLowerCase().includes(q) ||
+        (quinta.direccion ?? '').toLowerCase().includes(q)
+    )
+  }, [data?.quintas, query])
+
+  const featured = filteredQuintas.slice(0, 4)
+
   return (
     <div className="max-w-4xl mx-auto px-5 py-6">
-      <div className="mb-5">
-        <p className="text-sm text-[#7A6559]">Próximo fin de semana</p>
-        <h1 className="text-2xl font-bold text-[#4A3020]">
-          {data ? formatFinde(data.viernes, data.domingo) : '…'}
-        </h1>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <p className="text-sm text-[#7A6559]">{getGreeting()}</p>
+          <h1 className="text-2xl font-bold text-[#4A3020]">Explorá quintas</h1>
+        </div>
+        {user && (
+          <div className="w-10 h-10 rounded-full bg-[#6B4C35] flex items-center justify-center text-white font-bold">
+            {user.email?.[0].toUpperCase()}
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-5">
+      {/* Search bar */}
+      <div className="flex items-center gap-2 bg-white border border-[#E8DDD4] rounded-2xl px-4 h-11 mb-4 shadow-sm">
+        <span className="text-base">🔍</span>
+        <input
+          type="text"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Buscar por nombre o ciudad..."
+          className="flex-1 text-sm text-[#2C1810] placeholder-[#7A6559] bg-transparent outline-none"
+        />
+        {query && (
+          <button onClick={() => setQuery('')} className="text-[#7A6559] hover:text-[#4A3020] text-sm">✕</button>
+        )}
+      </div>
+
+      {/* Filtros */}
+      <div className="flex flex-wrap gap-2 mb-6">
         <ToggleChip label="🏊 Pileta"   active={pileta}   onClick={() => setPileta(v => !v)} />
         <ToggleChip label="🔥 Parrilla" active={parrilla} onClick={() => setParrilla(v => !v)} />
-        <div className="w-px bg-[#E8DDD4] mx-1" />
+        <div className="w-px bg-[#E8DDD4] mx-1 self-stretch" />
         {CAPACIDADES.map((c, i) => (
           <SelectChip key={c.label} label={c.label} active={capIdx === i} onClick={() => setCapIdx(i)} />
         ))}
-        <div className="w-px bg-[#E8DDD4] mx-1" />
+        <div className="w-px bg-[#E8DDD4] mx-1 self-stretch" />
         {PRECIOS.map((p, i) => (
           <SelectChip key={p.label} label={p.label} active={pxIdx === i} onClick={() => setPxIdx(i)} />
         ))}
       </div>
 
+      {/* Contenido */}
       {isLoading ? (
         <div className="flex flex-col items-center py-20 gap-3 text-[#7A6559]">
           <div className="w-8 h-8 border-2 border-[#6B4C35] border-t-transparent rounded-full animate-spin" />
@@ -80,15 +120,19 @@ export default function HomePage() {
             Reintentar
           </button>
         </div>
-      ) : data?.quintas.length === 0 ? (
+      ) : filteredQuintas.length === 0 ? (
         <div className="flex flex-col items-center py-20 gap-3">
-          <p className="text-5xl">😔</p>
-          <p className="font-bold text-[#4A3020]">Sin quintas disponibles</p>
+          <p className="text-5xl">{query ? '🔍' : '😔'}</p>
+          <p className="font-bold text-[#4A3020]">
+            {query ? 'Sin resultados' : 'Sin quintas disponibles'}
+          </p>
           <p className="text-sm text-[#7A6559] text-center max-w-xs">
-            Todas las quintas están reservadas con esos filtros.
+            {query
+              ? `No hay quintas que coincidan con "${query}".`
+              : 'Todas las quintas están reservadas con esos filtros.'}
           </p>
           <button
-            onClick={() => { setPileta(false); setParrilla(false); setCapIdx(0); setPxIdx(0) }}
+            onClick={() => { setQuery(''); setPileta(false); setParrilla(false); setCapIdx(0); setPxIdx(0) }}
             className="border border-[#E8DDD4] bg-white text-[#4A3020] px-5 py-2 rounded-xl text-sm font-semibold"
           >
             Limpiar filtros
@@ -96,12 +140,24 @@ export default function HomePage() {
         </div>
       ) : (
         <>
-          <p className="text-xs font-semibold text-[#7A6559] mb-4">
-            {data!.total} {data!.total === 1 ? 'quinta disponible' : 'quintas disponibles'} &middot;{' '}
-            <span className="text-[#4A7C59]">&#x2713; Viernes a domingo</span>
-          </p>
+          {/* Destacadas */}
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-[17px] font-bold text-[#4A3020]">Destacadas</h2>
+            <span className="text-xs text-[#7A6559]">
+              {filteredQuintas.length} {filteredQuintas.length === 1 ? 'quinta' : 'quintas'}
+            </span>
+          </div>
+          <div className="flex gap-4 overflow-x-auto pb-2 mb-6" style={{ scrollbarWidth: 'none' }}>
+            {featured.map(q => <FeaturedCard key={q.id} quinta={q} />)}
+          </div>
+
+          {/* Todas */}
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-[17px] font-bold text-[#4A3020]">Todas</h2>
+            <span className="text-xs font-semibold text-[#4A7C59]">✓ Disponibles este finde</span>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {data!.quintas.map((q) => <QuintaCard key={q.id} quinta={q} />)}
+            {filteredQuintas.map(q => <QuintaCard key={q.id} quinta={q} />)}
           </div>
         </>
       )}
