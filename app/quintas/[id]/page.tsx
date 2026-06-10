@@ -5,6 +5,7 @@ import { getOpiniones } from '@/api/opiniones'
 import AvailabilityCalendar from '@/components/AvailabilityCalendar'
 import OpinionesList from '@/components/OpinionesList'
 import QuintaDetailActions from '@/components/QuintaDetailActions'
+import { AMENITY_MAP } from '@/lib/amenities'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
 
@@ -62,11 +63,26 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
             👥 {quinta.capacidad} personas
           </span>
           <span className="bg-[#E8F0EB] text-[#4A7C59] text-xs font-semibold px-3 py-1.5 rounded-full">
-            💰 ${quinta.precioPorDia.toLocaleString('es-AR')}/noche
+            💰 ${quinta.precioPorDia.toLocaleString('es-AR')}/día
           </span>
-          {quinta.pileta   && <span className="bg-[#E8F0EB] text-[#4A7C59] text-xs font-semibold px-3 py-1.5 rounded-full">🏊 Pileta</span>}
-          {quinta.parrilla && <span className="bg-[#E8F0EB] text-[#4A7C59] text-xs font-semibold px-3 py-1.5 rounded-full">🔥 Parrilla</span>}
         </div>
+
+        {/* Servicios */}
+        {(quinta.pileta || quinta.parrilla || (quinta.amenities?.length ?? 0) > 0) && (
+          <>
+            <h2 className="text-base font-bold text-[#4A3020] mb-3">Servicios</h2>
+            <div className="flex flex-wrap gap-2 mb-5">
+              {quinta.pileta   && <ServiceBadge emoji="🏊" label="Pileta" />}
+              {quinta.parrilla && <ServiceBadge emoji="🔥" label="Parrilla" />}
+              {quinta.amenities?.map(a => {
+                const info = AMENITY_MAP[a]
+                return info
+                  ? <ServiceBadge key={a} emoji={info.emoji} label={info.label} />
+                  : <ServiceBadge key={a} emoji="•" label={a} />
+              })}
+            </div>
+          </>
+        )}
 
         {quinta.descripcion && (
           <>
@@ -95,5 +111,14 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
         precioPorDia={quinta.precioPorDia}
       />
     </div>
+  )
+}
+
+function ServiceBadge({ emoji, label }: { emoji: string; label: string }) {
+  return (
+    <span className="flex items-center gap-1.5 bg-[#F5EFE9] text-[#4A3020] text-xs font-semibold px-3 py-2 rounded-xl">
+      <span>{emoji}</span>
+      <span>{label}</span>
+    </span>
   )
 }

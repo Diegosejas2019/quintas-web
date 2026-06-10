@@ -11,6 +11,7 @@ export interface Quinta {
   activa: boolean;
   pileta: boolean;
   parrilla: boolean;
+  amenities?: string[];
   direccion?: string;
   latitud?: number;
   longitud?: number;

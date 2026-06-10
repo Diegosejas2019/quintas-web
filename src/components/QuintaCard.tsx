@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Quinta } from '@quintas-shared/types'
+import { AMENITY_MAP } from '@/lib/amenities'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
 
@@ -33,6 +34,12 @@ export default function QuintaCard({ quinta }: { quinta: Quinta }) {
           <Tag label={`👥 ${quinta.capacidad} personas`} />
           {quinta.pileta   && <Tag label="🏊 Pileta" green />}
           {quinta.parrilla && <Tag label="🔥 Parrilla" green />}
+          {quinta.amenities?.map(a => {
+            const info = AMENITY_MAP[a]
+            return info
+              ? <Tag key={a} label={`${info.emoji} ${info.label}`} green />
+              : <Tag key={a} label={a} green />
+          })}
         </div>
       </div>
     </Link>

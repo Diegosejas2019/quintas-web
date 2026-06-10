@@ -31,11 +31,13 @@ function getGreeting(): string {
 
 export default function HomePage() {
   const { user } = useAuthStore()
-  const [query, setQuery]       = useState('')
-  const [pileta, setPileta]     = useState(false)
-  const [parrilla, setParrilla] = useState(false)
-  const [capIdx, setCapIdx]     = useState(0)
-  const [pxIdx, setPxIdx]       = useState(0)
+  const [query, setQuery]         = useState('')
+  const [pileta, setPileta]       = useState(false)
+  const [parrilla, setParrilla]   = useState(false)
+  const [quincho, setQuincho]     = useState(false)
+  const [paraChicos, setParaChicos] = useState(false)
+  const [capIdx, setCapIdx]       = useState(0)
+  const [pxIdx, setPxIdx]         = useState(0)
 
   const filters: EstefindeFilters = {
     capacidad: CAPACIDADES[capIdx].value,
@@ -51,14 +53,14 @@ export default function HomePage() {
 
   const filteredQuintas = useMemo(() => {
     if (!data?.quintas) return []
-    const q = query.toLowerCase().trim()
-    if (!q) return data.quintas
-    return data.quintas.filter(
-      quinta =>
-        quinta.nombre.toLowerCase().includes(q) ||
-        (quinta.direccion ?? '').toLowerCase().includes(q)
-    )
-  }, [data?.quintas, query])
+    return data.quintas.filter(quinta => {
+      const q = query.toLowerCase().trim()
+      if (q && !quinta.nombre.toLowerCase().includes(q) && !(quinta.direccion ?? '').toLowerCase().includes(q)) return false
+      if (quincho    && !quinta.amenities?.includes('quincho'))       return false
+      if (paraChicos && !quinta.amenities?.includes('juegos_jardin')) return false
+      return true
+    })
+  }, [data?.quintas, query, quincho, paraChicos])
 
   const featured = filteredQuintas.slice(0, 4)
 
@@ -94,8 +96,10 @@ export default function HomePage() {
 
       {/* Filtros */}
       <div className="flex gap-2 overflow-x-auto mb-6 pb-1" style={{ scrollbarWidth: 'none' }}>
-        <ToggleChip label="🏊 Pileta"   active={pileta}   onClick={() => setPileta(v => !v)} />
-        <ToggleChip label="🔥 Parrilla" active={parrilla} onClick={() => setParrilla(v => !v)} />
+        <ToggleChip label="🏊 Pileta"    active={pileta}    onClick={() => setPileta(v => !v)} />
+        <ToggleChip label="🔥 Parrilla"  active={parrilla}  onClick={() => setParrilla(v => !v)} />
+        <ToggleChip label="🏠 Quincho"   active={quincho}   onClick={() => setQuincho(v => !v)} />
+        <ToggleChip label="🛝 Para chicos" active={paraChicos} onClick={() => setParaChicos(v => !v)} />
         <div className="w-px bg-[#E8DDD4] mx-1 self-stretch" />
         {CAPACIDADES.map((c, i) => (
           <SelectChip key={c.label} label={c.label} active={capIdx === i} onClick={() => setCapIdx(i)} />
@@ -132,7 +136,7 @@ export default function HomePage() {
               : 'Todas las quintas están reservadas con esos filtros.'}
           </p>
           <button
-            onClick={() => { setQuery(''); setPileta(false); setParrilla(false); setCapIdx(0); setPxIdx(0) }}
+            onClick={() => { setQuery(''); setPileta(false); setParrilla(false); setQuincho(false); setParaChicos(false); setCapIdx(0); setPxIdx(0) }}
             className="border border-[#E8DDD4] bg-white text-[#4A3020] px-5 py-2 rounded-xl text-sm font-semibold"
           >
             Limpiar filtros
