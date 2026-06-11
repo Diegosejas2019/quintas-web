@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { useFavoritesStore } from '@/store/favoritesStore'
 import { useAuthStore } from '@/store/authStore'
+import { useUIStore } from '@/store/uiStore'
 import { syncFavoritos } from '@/api/favoritos'
 import type { Quinta } from '@/types/types'
 
@@ -14,13 +15,16 @@ interface Props {
 export default function FavoriteButton({ quinta, className = '' }: Props) {
   const { toggle, isFavorite } = useFavoritesStore()
   const { user } = useAuthStore()
+  const { addToast } = useUIStore()
   const saved = isFavorite(quinta.id)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    const adding = !saved
     toggle(quinta)
+    addToast(adding ? 'Agregado a favoritos' : 'Eliminado de favoritos', adding ? 'success' : 'info')
 
     if (user) {
       if (debounceRef.current) clearTimeout(debounceRef.current)
