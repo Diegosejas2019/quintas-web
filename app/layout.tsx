@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import 'react-day-picker/style.css'
 import Providers from '@/components/Providers'
 import BottomTabBar from '@/components/BottomTabBar'
 import ToastContainer from '@/components/ToastContainer'

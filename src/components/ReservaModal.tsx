@@ -6,6 +6,7 @@ import { crearReserva } from '@/api/reservas'
 import { actualizarPerfil } from '@/api/usuarios'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
+import DateRangePicker from '@/components/DateRangePicker'
 
 interface Props {
   quintaId: string
@@ -66,20 +67,12 @@ export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, fec
           <span className="text-sm font-normal text-[#7A6559]">/ noche</span>
         </p>
 
-        <div className="flex gap-3 mb-3">
-          <div className="flex-1">
-            <label className="text-xs font-bold text-[#7A6559] uppercase block mb-1.5">Llegada</label>
-            <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
-              min={new Date().toISOString().split('T')[0]}
-              className="border border-[#E8DDD4] rounded-xl px-3 py-3 w-full bg-[#FAF5F0] text-[#2C1810] text-sm" />
-          </div>
-          <div className="flex-1">
-            <label className="text-xs font-bold text-[#7A6559] uppercase block mb-1.5">Salida</label>
-            <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)}
-              min={fechaInicio || new Date().toISOString().split('T')[0]}
-              className="border border-[#E8DDD4] rounded-xl px-3 py-3 w-full bg-[#FAF5F0] text-[#2C1810] text-sm" />
-          </div>
-        </div>
+        <DateRangePicker
+          fechaInicio={fechaInicio}
+          fechaFin={fechaFin}
+          onChangeFechaInicio={setFechaInicio}
+          onChangeFechaFin={setFechaFin}
+        />
 
         <label className="text-xs font-bold text-[#7A6559] uppercase block mb-1.5">Tu nombre</label>
         <input value={nombre} onChange={e => setNombre(e.target.value)}
