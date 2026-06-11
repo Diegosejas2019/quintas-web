@@ -4,6 +4,7 @@ import 'react-day-picker/style.css'
 import Providers from '@/components/Providers'
 import BottomTabBar from '@/components/BottomTabBar'
 import ToastContainer from '@/components/ToastContainer'
+import AdminAwarePadding from '@/components/AdminAwarePadding'
 
 export const metadata: Metadata = {
   title: 'Quintas App',
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es" className="h-full">
       <body className="min-h-full flex flex-col">
         <Providers>
-          <main className="flex-1" style={{ paddingBottom: 'calc(72px + env(safe-area-inset-bottom))' }}>{children}</main>
+          <AdminAwarePadding>{children}</AdminAwarePadding>
           <BottomTabBar />
           <ToastContainer />
         </Providers>
