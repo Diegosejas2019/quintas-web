@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { crearReserva } from '@/api/reservas'
+import { actualizarPerfil } from '@/api/usuarios'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
 
@@ -14,10 +15,10 @@ interface Props {
 }
 
 export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, onClose }: Props) {
-  const { user } = useAuthStore()
+  const { user, perfil, setPerfil } = useAuthStore()
   const { addToast } = useUIStore()
-  const [nombre,      setNombre]      = useState(user?.user_metadata?.full_name ?? '')
-  const [telefono,    setTelefono]    = useState('')
+  const [nombre,      setNombre]      = useState(perfil?.nombre ?? user?.user_metadata?.full_name ?? '')
+  const [telefono,    setTelefono]    = useState(perfil?.telefono ?? '')
   const [fechaInicio, setFechaInicio] = useState('')
   const [fechaFin,    setFechaFin]    = useState('')
   const [error,       setError]       = useState('')
@@ -26,6 +27,9 @@ export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, onC
     mutationFn: crearReserva,
     onSuccess: () => {
       addToast('¡Reserva creada con éxito!', 'success')
+      if (telefono && telefono !== perfil?.telefono) {
+        actualizarPerfil({ telefono }).then(setPerfil).catch(() => {})
+      }
       onClose()
     },
     onError: (e: Error) => setError(e.message),
@@ -44,6 +48,7 @@ export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, onC
       telefonoCliente: telefono,
       fechaInicio,
       fechaFin,
+      usuarioId: perfil?.id,
     })
   }
 

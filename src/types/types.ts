@@ -35,6 +35,24 @@ export interface EstefindeFilters {
   parrilla?: boolean;
 }
 
+export interface PerfilUsuario {
+  id: string
+  email: string
+  nombre: string
+  telefono?: string
+  tipoUsuario: string
+}
+
+export interface MiReserva {
+  id: string
+  quintaId: string
+  quintaNombre: string
+  fechaInicio: string
+  fechaFin: string
+  precioTotal: number
+  estado: EstadoReserva
+}
+
 export interface Alerta {
   id: string;
   quintaId: string;

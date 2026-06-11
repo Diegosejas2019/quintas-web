@@ -30,6 +30,10 @@ export default function CuentaPage() {
         🔔 Mis alertas
       </Link>
 
+      <Link href="/mis-reservas" className="block bg-white rounded-2xl p-4 shadow-sm mb-3 text-sm font-medium text-[#4A3020] hover:shadow-md">
+        📋 Mis reservas
+      </Link>
+
       <button
         onClick={async () => { await signOut(); router.push('/') }}
         className="w-full bg-red-50 border border-red-200 text-red-600 font-semibold py-3 rounded-2xl text-sm hover:bg-red-100"
