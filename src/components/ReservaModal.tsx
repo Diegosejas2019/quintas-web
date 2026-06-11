@@ -11,15 +11,16 @@ interface Props {
   quintaId: string
   quintaNombre: string
   precioPorDia: number
+  fechaInicioDefault?: string
   onClose: () => void
 }
 
-export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, onClose }: Props) {
+export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, fechaInicioDefault = '', onClose }: Props) {
   const { user, perfil, setPerfil } = useAuthStore()
   const { addToast } = useUIStore()
   const [nombre,      setNombre]      = useState(perfil?.nombre ?? user?.user_metadata?.full_name ?? '')
   const [telefono,    setTelefono]    = useState(perfil?.telefono ?? '')
-  const [fechaInicio, setFechaInicio] = useState('')
+  const [fechaInicio, setFechaInicio] = useState(fechaInicioDefault)
   const [fechaFin,    setFechaFin]    = useState('')
   const [error,       setError]       = useState('')
 

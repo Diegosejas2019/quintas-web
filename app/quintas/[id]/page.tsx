@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getQuintaById } from '@/api/quintas'
 import { getOpiniones } from '@/api/opiniones'
-import AvailabilityCalendar from '@/components/AvailabilityCalendar'
 import OpinionesList from '@/components/OpinionesList'
-import QuintaDetailActions from '@/components/QuintaDetailActions'
+import QuintaDetailClient from '@/components/QuintaDetailClient'
 import { AMENITY_MAP } from '@/lib/amenities'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
@@ -91,11 +90,13 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
           </>
         )}
 
-        {/* Disponibilidad — client component */}
+        {/* Disponibilidad + acciones — client component unificado */}
         <h2 className="text-base font-bold text-[#4A3020] mb-3">Disponibilidad</h2>
-        <div className="mb-5">
-          <AvailabilityCalendar quintaId={id} />
-        </div>
+        <QuintaDetailClient
+          quintaId={id}
+          quintaNombre={quinta.nombre}
+          precioPorDia={quinta.precioPorDia}
+        />
 
         {/* Reseñas */}
         <h2 className="text-base font-bold text-[#4A3020] mb-3">
@@ -103,13 +104,6 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
         </h2>
         <OpinionesList opiniones={opinionesData.opiniones} />
       </div>
-
-      {/* Actions (sticky footer — client component) */}
-      <QuintaDetailActions
-        quintaId={id}
-        quintaNombre={quinta.nombre}
-        precioPorDia={quinta.precioPorDia}
-      />
     </div>
   )
 }
