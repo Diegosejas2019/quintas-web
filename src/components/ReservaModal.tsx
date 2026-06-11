@@ -27,9 +27,9 @@ export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, fec
 
   const mutation = useMutation({
     mutationFn: crearReserva,
-    onSuccess: () => {
+    onSuccess: async () => {
       addToast('¡Reserva creada con éxito!', 'success')
-      queryClient.invalidateQueries({ queryKey: ['disponibilidad', quintaId] })
+      await queryClient.refetchQueries({ queryKey: ['disponibilidad', quintaId] })
       queryClient.invalidateQueries({ queryKey: ['mis-reservas'] })
       if (telefono && telefono !== perfil?.telefono) {
         actualizarPerfil({ telefono }).then(setPerfil).catch(() => {})
@@ -69,14 +69,14 @@ export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, fec
         <div className="flex gap-3 mb-3">
           <div className="flex-1">
             <label className="text-xs font-bold text-[#7A6559] uppercase block mb-1.5">Llegada</label>
-            <input value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
-              placeholder="YYYY-MM-DD"
+            <input type="date" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
               className="border border-[#E8DDD4] rounded-xl px-3 py-3 w-full bg-[#FAF5F0] text-[#2C1810] text-sm" />
           </div>
           <div className="flex-1">
             <label className="text-xs font-bold text-[#7A6559] uppercase block mb-1.5">Salida</label>
-            <input value={fechaFin} onChange={e => setFechaFin(e.target.value)}
-              placeholder="YYYY-MM-DD"
+            <input type="date" value={fechaFin} onChange={e => setFechaFin(e.target.value)}
+              min={fechaInicio || new Date().toISOString().split('T')[0]}
               className="border border-[#E8DDD4] rounded-xl px-3 py-3 w-full bg-[#FAF5F0] text-[#2C1810] text-sm" />
           </div>
         </div>
