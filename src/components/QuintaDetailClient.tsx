@@ -126,7 +126,7 @@ export default function QuintaDetailClient({ quintaId, quintaNombre, precioPorDi
       </div>
 
       {/* Sticky reserve bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 border-t border-[#E8DDD4] px-5 py-3 flex items-center justify-between" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+      <div className="fixed left-0 right-0 z-40 bg-white/95 border-t border-[#E8DDD4] px-5 py-3 flex items-center justify-between" style={{ bottom: 'calc(60px + env(safe-area-inset-bottom))' }}>
         <div>
           <p className="text-xl font-bold text-[#4A3020]">
             ${precioPorDia.toLocaleString('es-AR')}

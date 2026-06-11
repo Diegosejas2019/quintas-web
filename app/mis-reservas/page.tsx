@@ -7,6 +7,8 @@ import { useAuthStore } from '@/store/authStore'
 import type { MiReserva, EstadoReserva } from '@/types/types'
 
 const MESES_CORTOS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
+const getEmoji = (nombre: string) => EMOJIS[nombre.charCodeAt(0) % EMOJIS.length]
 
 function formatRango(inicio: string, fin: string) {
   const d1 = new Date(inicio + 'T12:00:00')
@@ -33,18 +35,26 @@ function isProxima(r: MiReserva): boolean {
 
 function ReservaCard({ r }: { r: MiReserva }) {
   const est = ESTADO_COLORS[r.estado]
+  const emoji = getEmoji(r.nombreQuinta)
   return (
     <div className="bg-white rounded-2xl p-4 mb-3 shadow-sm">
-      <div className="flex items-start justify-between mb-1">
-        <p className="text-sm font-semibold text-[#4A3020] flex-1 mr-3 truncate">{r.quintaNombre}</p>
-        <span
-          className="text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
-          style={{ backgroundColor: est.bg, color: est.text }}
-        >
-          {r.estado}
-        </span>
+      <div className="flex items-center gap-3 mb-2">
+        <div className="w-10 h-10 rounded-xl bg-[#F5EFE9] flex items-center justify-center text-xl flex-shrink-0">
+          {emoji}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-sm font-semibold text-[#4A3020] truncate">{r.nombreQuinta}</p>
+            <span
+              className="text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap flex-shrink-0"
+              style={{ backgroundColor: est.bg, color: est.text }}
+            >
+              {r.estado}
+            </span>
+          </div>
+          <p className="text-xs text-[#7A6559] mt-0.5">📅 {formatRango(r.fechaInicio, r.fechaFin)}</p>
+        </div>
       </div>
-      <p className="text-xs text-[#7A6559] mb-1">📅 {formatRango(r.fechaInicio, r.fechaFin)}</p>
       <p className="text-xs font-semibold text-[#6B4C35]">${r.precioTotal.toLocaleString('es-AR')}</p>
     </div>
   )

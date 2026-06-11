@@ -46,7 +46,7 @@ export interface PerfilUsuario {
 export interface MiReserva {
   id: string
   quintaId: string
-  quintaNombre: string
+  nombreQuinta: string
   fechaInicio: string
   fechaFin: string
   precioTotal: number

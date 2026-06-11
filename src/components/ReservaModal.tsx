@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { crearReserva } from '@/api/reservas'
 import { actualizarPerfil } from '@/api/usuarios'
 import { useAuthStore } from '@/store/authStore'
@@ -18,6 +18,7 @@ interface Props {
 export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, fechaInicioDefault = '', onClose }: Props) {
   const { user, perfil, setPerfil } = useAuthStore()
   const { addToast } = useUIStore()
+  const queryClient = useQueryClient()
   const [nombre,      setNombre]      = useState(perfil?.nombre ?? user?.user_metadata?.full_name ?? '')
   const [telefono,    setTelefono]    = useState(perfil?.telefono ?? '')
   const [fechaInicio, setFechaInicio] = useState(fechaInicioDefault)
@@ -28,6 +29,8 @@ export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, fec
     mutationFn: crearReserva,
     onSuccess: () => {
       addToast('¡Reserva creada con éxito!', 'success')
+      queryClient.invalidateQueries({ queryKey: ['disponibilidad', quintaId] })
+      queryClient.invalidateQueries({ queryKey: ['mis-reservas'] })
       if (telefono && telefono !== perfil?.telefono) {
         actualizarPerfil({ telefono }).then(setPerfil).catch(() => {})
       }
