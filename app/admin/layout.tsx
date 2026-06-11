@@ -15,11 +15,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (perfil && perfil.tipoUsuario !== 'propietario') router.replace('/')
   }, [user, loading, perfil, router])
 
-  if (loading || !user || !perfil || perfil.tipoUsuario !== 'propietario') {
+  // Mientras carga, mostrar spinner solo si ya hay user (evita loop en /admin/login)
+  if (loading) {
     return <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
       <div className="w-8 h-8 border-4 border-[#C4633A] border-t-transparent rounded-full animate-spin" />
     </div>
   }
+
+  // Sin sesión: el useEffect redirige a /admin/login, renderizar children en blanco mientras
+  if (!user) return <div className="min-h-screen bg-[#FAF7F2]">{children}</div>
+
+  // Con sesión pero sin perfil cargado aún
+  if (!perfil) {
+    return <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
+      <div className="w-8 h-8 border-4 border-[#C4633A] border-t-transparent rounded-full animate-spin" />
+    </div>
+  }
+
+  if (perfil.tipoUsuario !== 'propietario') return null
 
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
