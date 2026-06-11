@@ -53,6 +53,13 @@ export interface MiReserva {
   estado: EstadoReserva
 }
 
+export interface FavoriteItem {
+  id: string
+  nombre: string
+  precioPorDia: number
+  direccion?: string
+}
+
 export interface Alerta {
   id: string;
   quintaId: string;

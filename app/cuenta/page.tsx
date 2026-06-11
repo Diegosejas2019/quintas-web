@@ -30,6 +30,10 @@ export default function CuentaPage() {
         🔔 Mis alertas
       </Link>
 
+      <Link href="/favoritos" className="block bg-white rounded-2xl p-4 shadow-sm mb-3 text-sm font-medium text-[#4A3020] hover:shadow-md">
+        ♡ Mis favoritos
+      </Link>
+
       <Link href="/mis-reservas" className="block bg-white rounded-2xl p-4 shadow-sm mb-3 text-sm font-medium text-[#4A3020] hover:shadow-md">
         📋 Mis reservas
       </Link>

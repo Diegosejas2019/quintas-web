@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Quinta } from '@/types/types'
 import { AMENITY_MAP } from '@/lib/amenities'
+import FavoriteButton from '@/components/FavoriteButton'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
 
@@ -18,6 +19,7 @@ export default function QuintaCard({ quinta }: { quinta: Quinta }) {
           {quinta.pileta   && <AmenityBadge label="🏊" />}
           {quinta.parrilla && <AmenityBadge label="🔥" />}
         </div>
+        <FavoriteButton quinta={quinta} className="absolute bottom-3 right-3" />
       </div>
       <div className="p-4">
         <div className="flex justify-between items-start">

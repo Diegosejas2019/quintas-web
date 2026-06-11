@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Quinta } from '@/types/types'
+import FavoriteButton from '@/components/FavoriteButton'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
 
@@ -14,9 +15,7 @@ export default function FeaturedCard({ quinta }: { quinta: Quinta }) {
     >
       <div className="h-36 bg-[#6B4C35] flex items-center justify-center relative">
         <span style={{ fontSize: 52 }}>{emoji}</span>
-        <div className="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/90 flex items-center justify-center text-sm">
-          ♡
-        </div>
+        <FavoriteButton quinta={quinta} className="absolute top-2.5 right-2.5" />
       </div>
       <div className="p-3">
         <p className="text-sm font-bold text-[#4A3020] truncate">{quinta.nombre}</p>

@@ -4,6 +4,7 @@ import { getQuintaById } from '@/api/quintas'
 import { getOpiniones } from '@/api/opiniones'
 import OpinionesList from '@/components/OpinionesList'
 import QuintaDetailClient from '@/components/QuintaDetailClient'
+import DetailActions from '@/components/DetailActions'
 import { AMENITY_MAP } from '@/lib/amenities'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
@@ -43,6 +44,9 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
         <Link href="/"
           className="absolute top-4 left-4 bg-white/90 rounded-full w-10 h-10 flex items-center justify-center text-lg hover:bg-white"
         >←</Link>
+        <div className="absolute top-4 right-4">
+          <DetailActions quinta={quinta} />
+        </div>
       </div>
 
       <div className="px-5 pt-5 pb-24">
