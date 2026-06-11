@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import type { Quinta } from '@quintas-shared/types'
+import type { Quinta } from '@/types/types'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
 

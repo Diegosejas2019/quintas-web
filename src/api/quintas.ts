@@ -1,5 +1,5 @@
 import { apiClient } from './client'
-import type { Quinta, DisponibilidadResponse, EstefindeResponse, EstefindeFilters } from '@quintas-shared/types'
+import type { Quinta, DisponibilidadResponse, EstefindeResponse, EstefindeFilters } from '@/types/types'
 
 export const getQuintas = async (): Promise<Quinta[]> => {
   const { data } = await apiClient.get('/quintas')

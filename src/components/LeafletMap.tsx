@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Circle, Popup, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import type { Quinta } from '@quintas-shared/types'
+import type { Quinta } from '@/types/types'
 
 interface Props {
   quintas: Quinta[]
