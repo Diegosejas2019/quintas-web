@@ -39,8 +39,11 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
   return (
     <div className="max-w-2xl mx-auto">
       {/* Hero */}
-      <div className="h-64 bg-[#6B4C35] flex items-center justify-center relative">
-        <span style={{ fontSize: 80 }}>{emoji}</span>
+      <div className="h-64 bg-[#6B4C35] flex items-center justify-center relative overflow-hidden">
+        {quinta.imagenes?.[0]
+          ? <img src={quinta.imagenes[0]} alt={quinta.nombre} className="absolute inset-0 w-full h-full object-cover" />
+          : <span style={{ fontSize: 80 }}>{emoji}</span>
+        }
         <Link href="/"
           className="absolute top-4 left-4 bg-white/90 rounded-full w-10 h-10 flex items-center justify-center text-lg hover:bg-white"
         >←</Link>

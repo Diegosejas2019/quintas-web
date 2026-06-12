@@ -13,8 +13,11 @@ export default function FeaturedCard({ quinta }: { quinta: Quinta }) {
       className="flex-shrink-0 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
       style={{ width: 220 }}
     >
-      <div className="h-36 bg-[#6B4C35] flex items-center justify-center relative">
-        <span style={{ fontSize: 52 }}>{emoji}</span>
+      <div className="h-36 bg-[#6B4C35] flex items-center justify-center relative overflow-hidden">
+        {quinta.imagenes?.[0]
+          ? <img src={quinta.imagenes[0]} alt={quinta.nombre} className="absolute inset-0 w-full h-full object-cover" />
+          : <span style={{ fontSize: 52 }}>{emoji}</span>
+        }
         <FavoriteButton quinta={quinta} className="absolute top-2.5 right-2.5" />
       </div>
       <div className="p-3">

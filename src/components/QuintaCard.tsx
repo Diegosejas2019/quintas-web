@@ -10,8 +10,11 @@ export default function QuintaCard({ quinta }: { quinta: Quinta }) {
 
   return (
     <Link href={`/quintas/${quinta.id}`} className="block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <div className="h-44 bg-[#6B4C35] flex items-center justify-center relative">
-        <span style={{ fontSize: 56 }}>{emoji}</span>
+      <div className="h-44 bg-[#6B4C35] flex items-center justify-center relative overflow-hidden">
+        {quinta.imagenes?.[0]
+          ? <img src={quinta.imagenes[0]} alt={quinta.nombre} className="absolute inset-0 w-full h-full object-cover" />
+          : <span style={{ fontSize: 56 }}>{emoji}</span>
+        }
         <span className="absolute top-3 left-3 bg-[#4A7C59] text-white text-[11px] font-bold px-2.5 py-1 rounded-full">
           ✓ Disponible
         </span>
