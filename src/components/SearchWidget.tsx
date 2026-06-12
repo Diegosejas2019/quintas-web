@@ -104,6 +104,15 @@ export default function SearchWidget({ onSearch }: Props) {
               disabled={{ before: new Date() }}
               numberOfMonths={1}
             />
+            {range?.from && range?.to && (
+              <button
+                type="button"
+                onClick={() => { setShowCal(false); handleSearch() }}
+                className="w-full mt-1 bg-[#6B4C35] hover:bg-[#4A3020] text-white font-bold py-2.5 rounded-xl text-sm transition-colors"
+              >
+                Seleccionar fechas
+              </button>
+            )}
           </div>
         )}
       </div>

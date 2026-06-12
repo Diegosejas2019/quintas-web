@@ -6,6 +6,7 @@ import OpinionesList from '@/components/OpinionesList'
 import QuintaDetailClient from '@/components/QuintaDetailClient'
 import DetailActions from '@/components/DetailActions'
 import ImageCarousel from '@/components/ImageCarousel'
+import ConsultarButton from '@/components/chat/ConsultarButton'
 import { AMENITY_MAP } from '@/lib/amenities'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
@@ -28,8 +29,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 }
 
-export default async function QuintaPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function QuintaPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ desde?: string; hasta?: string }> }) {
   const { id } = await params
+  const { desde, hasta } = await searchParams
   const [quinta, opinionesData] = await Promise.all([
     getQuintaById(id),
     getOpiniones(id).catch(() => ({ opiniones: [], promedio: 0 })),
@@ -112,12 +114,17 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
           </>
         )}
 
+        {/* Consultar al propietario */}
+        <ConsultarButton quintaId={id} />
+
         {/* Disponibilidad + acciones — client component unificado */}
         <h2 className="text-base font-bold text-[#4A3020] mb-3">Disponibilidad</h2>
         <QuintaDetailClient
           quintaId={id}
           quintaNombre={quinta.nombre}
           precioPorDia={quinta.precioPorDia}
+          fechaInicioDefault={desde}
+          fechaFinDefault={hasta}
         />
 
         {/* Reseñas */}

@@ -6,7 +6,7 @@ import type { Quinta, FavoriteItem } from '@/types/types'
 
 interface FavoritesState {
   items: FavoriteItem[]
-  toggle: (quinta: Pick<Quinta, 'id' | 'nombre' | 'precioPorDia' | 'direccion'>) => void
+  toggle: (quinta: Pick<Quinta, 'id' | 'nombre' | 'precioPorDia' | 'direccion' | 'imagenes'>) => void
   isFavorite: (id: string) => boolean
   hydrate: (ids: string[]) => void
   clear: () => void
@@ -27,6 +27,7 @@ export const useFavoritesStore = create<FavoritesState>()(
               nombre: quinta.nombre,
               precioPorDia: quinta.precioPorDia,
               direccion: quinta.direccion,
+              imagenUrl: quinta.imagenes?.[0],
             }],
           }))
         }

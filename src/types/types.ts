@@ -17,6 +17,27 @@ export interface Quinta {
   longitud?: number;
   horaInicio?: string;
   horaFin?: string;
+  telefono?: string | null;
+}
+
+export interface Conversacion {
+  id: string;
+  quintaId: string;
+  quintaNombre: string;
+  clienteId: string;
+  clienteNombre: string;
+  ultimoMensaje?: string | null;
+  ultimoMensajeEn: string;
+  totalMensajes: number;
+  mensajesNoLeidos: number;
+}
+
+export interface Mensaje {
+  id: string;
+  texto: string;
+  remitenteRol: 'Cliente' | 'Propietario';
+  remitenteId: string;
+  enviadoEn: string;
 }
 
 export interface DisponibilidadResponse {
@@ -62,6 +83,7 @@ export interface FavoriteItem {
   nombre: string
   precioPorDia: number
   direccion?: string
+  imagenUrl?: string
 }
 
 export interface Alerta {

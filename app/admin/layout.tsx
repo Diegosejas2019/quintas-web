@@ -41,6 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/admin" className="text-sm font-bold text-[#2C1810]">Mi panel</Link>
           <Link href="/admin/quintas" className="text-sm text-gray-500 hover:text-[#2C1810]">Quintas</Link>
           <Link href="/admin/reservas" className="text-sm text-gray-500 hover:text-[#2C1810]">Reservas</Link>
+          <Link href="/admin/mensajes" className="text-sm text-gray-500 hover:text-[#2C1810]">Mensajes</Link>
         </nav>
         <button
           onClick={signOut}

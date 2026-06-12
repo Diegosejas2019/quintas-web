@@ -13,17 +13,18 @@ interface Props {
   quintaNombre: string
   precioPorDia: number
   fechaInicioDefault?: string
+  fechaFinDefault?: string
   onClose: () => void
 }
 
-export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, fechaInicioDefault = '', onClose }: Props) {
+export default function ReservaModal({ quintaId, quintaNombre, precioPorDia, fechaInicioDefault = '', fechaFinDefault = '', onClose }: Props) {
   const { user, perfil, setPerfil } = useAuthStore()
   const { addToast } = useUIStore()
   const queryClient = useQueryClient()
   const [nombre,      setNombre]      = useState(perfil?.nombre ?? user?.user_metadata?.full_name ?? '')
   const [telefono,    setTelefono]    = useState(perfil?.telefono ?? '')
   const [fechaInicio, setFechaInicio] = useState(fechaInicioDefault)
-  const [fechaFin,    setFechaFin]    = useState('')
+  const [fechaFin,    setFechaFin]    = useState(fechaFinDefault)
   const [error,       setError]       = useState('')
 
   const mutation = useMutation({

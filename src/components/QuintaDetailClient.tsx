@@ -15,9 +15,11 @@ interface Props {
   quintaId: string
   quintaNombre: string
   precioPorDia: number
+  fechaInicioDefault?: string
+  fechaFinDefault?: string
 }
 
-export default function QuintaDetailClient({ quintaId, quintaNombre, precioPorDia }: Props) {
+export default function QuintaDetailClient({ quintaId, quintaNombre, precioPorDia, fechaInicioDefault = '', fechaFinDefault = '' }: Props) {
   const { user } = useAuthStore()
   const router = useRouter()
 
@@ -25,10 +27,10 @@ export default function QuintaDetailClient({ quintaId, quintaNombre, precioPorDi
   const [mes, setMes]   = useState(now.getMonth() + 1)
   const [anio, setAnio] = useState(now.getFullYear())
 
-  const [showReserva, setShowReserva] = useState(false)
+  const [showReserva, setShowReserva] = useState(!!(fechaInicioDefault && fechaFinDefault))
   const [showAlerta,  setShowAlerta]  = useState(false)
   const [showOpinion, setShowOpinion] = useState(false)
-  const [fechaInicio, setFechaInicio] = useState('')
+  const [fechaInicio, setFechaInicio] = useState(fechaInicioDefault)
 
   const { data } = useQuery({
     queryKey: ['disponibilidad', quintaId, mes, anio],
@@ -147,6 +149,7 @@ export default function QuintaDetailClient({ quintaId, quintaNombre, precioPorDi
           quintaNombre={quintaNombre}
           precioPorDia={precioPorDia}
           fechaInicioDefault={fechaInicio}
+          fechaFinDefault={fechaFinDefault}
           onClose={() => setShowReserva(false)}
         />
       )}
