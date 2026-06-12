@@ -42,7 +42,7 @@ export default function FavoritaCard({ item }: Props) {
     queryKey: ['quinta', item.id],
     queryFn: () => getQuintaById(item.id),
     staleTime: 10 * 60 * 1000,
-    enabled: !imagenUrl,
+    enabled: !item.imagenUrl,
   })
 
   const handleConfirmarFechas = async (d: string, h: string) => {
@@ -67,7 +67,7 @@ export default function FavoritaCard({ item }: Props) {
     }
   }
 
-  const imagenUrl = imagenUrl ?? quintaData?.imagenes?.[0]
+  const imagenUrl = item.imagenUrl ?? quintaData?.imagenes?.[0]
   const promedio = opinionesData?.promedio ?? 0
   const totalOpiniones = opinionesData?.opiniones.length ?? 0
 

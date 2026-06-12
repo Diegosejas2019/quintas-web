@@ -27,7 +27,20 @@ export default function FavoritosPage() {
 
   return (
     <div className="max-w-lg mx-auto px-4 py-6">
-      <h1 className="text-xl font-bold text-[#2C1810] mb-1">Favoritos</h1>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="text-xl font-bold text-[#2C1810]">Favoritos</h1>
+        <Link
+          href="/mapa"
+          className="flex items-center gap-1.5 border border-[#2C1810] rounded-lg px-3 py-1.5 text-sm font-semibold text-[#2C1810] hover:bg-[#F5EFE9] transition-colors"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+            <line x1="9" y1="3" x2="9" y2="18" />
+            <line x1="15" y1="6" x2="15" y2="21" />
+          </svg>
+          Mapa
+        </Link>
+      </div>
       <p className="text-sm text-[#7A6559] mb-4">{items.length} alojamiento{items.length !== 1 ? 's' : ''} guardado{items.length !== 1 ? 's' : ''}</p>
 
       <div className="flex flex-col gap-3">
