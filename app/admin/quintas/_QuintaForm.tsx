@@ -3,6 +3,9 @@
 import type { QuintaFormData } from '@/api/admin/quintas'
 import type { Quinta } from '@/types/types'
 import { useState } from 'react'
+import ImageUploader from '@/components/admin/ImageUploader'
+import dynamic from 'next/dynamic'
+const LocationPicker = dynamic(() => import('@/components/admin/LocationPicker'), { ssr: false })
 
 interface Props {
   initial?: Quinta
@@ -17,13 +20,15 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
   const [descripcion, setDescripcion] = useState(initial?.descripcion ?? '')
   const [precio, setPrecio] = useState(String(initial?.precioPorDia ?? ''))
   const [capacidad, setCapacidad] = useState(String(initial?.capacidad ?? ''))
-  const [direccion, setDireccion] = useState(initial?.direccion ?? '')
-  const [imagenesRaw, setImagenesRaw] = useState((initial?.imagenes ?? []).join('\n'))
+  const [imagenes, setImagenes] = useState<string[]>(initial?.imagenes ?? [])
   const [amenitiesRaw, setAmenitiesRaw] = useState((initial?.amenities ?? []).join(', '))
   const [pileta, setPileta] = useState(initial?.pileta ?? false)
   const [parrilla, setParrilla] = useState(initial?.parrilla ?? false)
-  const [latitud, setLatitud] = useState(String(initial?.latitud ?? ''))
-  const [longitud, setLongitud] = useState(String(initial?.longitud ?? ''))
+  const [location, setLocation] = useState({
+    lat: initial?.latitud ?? 0,
+    lng: initial?.longitud ?? 0,
+    direccion: initial?.direccion ?? '',
+  })
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,13 +37,13 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
       descripcion: descripcion || undefined,
       precioPorDia: Number(precio),
       capacidad: Number(capacidad),
-      imagenes: imagenesRaw.split('\n').map(s => s.trim()).filter(Boolean),
+      imagenes,
       amenities: amenitiesRaw.split(',').map(s => s.trim()).filter(Boolean),
-      direccion: direccion || undefined,
+      direccion: location.direccion || undefined,
       pileta,
       parrilla,
-      latitud: latitud ? Number(latitud) : undefined,
-      longitud: longitud ? Number(longitud) : undefined,
+      latitud: location.lat || undefined,
+      longitud: location.lng || undefined,
     })
   }
 
@@ -72,21 +77,11 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
         </div>
         {field('Precio por día ($) *', precio, setPrecio, { type: 'number', placeholder: '15000' })}
         {field('Capacidad (personas) *', capacidad, setCapacidad, { type: 'number', placeholder: '10' })}
-        {field('Dirección', direccion, setDireccion, { placeholder: 'Av. Colón 1234, Córdoba' })}
       </div>
 
       <div className="bg-white rounded-2xl p-5 shadow-sm space-y-4">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Imágenes</p>
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 mb-1">URLs de imágenes (una por línea)</label>
-          <textarea
-            value={imagenesRaw}
-            onChange={e => setImagenesRaw(e.target.value)}
-            rows={4}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#C4633A]/30 font-mono text-xs"
-            placeholder="https://ejemplo.com/foto1.jpg&#10;https://ejemplo.com/foto2.jpg"
-          />
-        </div>
+        <ImageUploader value={imagenes} onChange={setImagenes} />
       </div>
 
       <div className="bg-white rounded-2xl p-5 shadow-sm space-y-4">
@@ -125,10 +120,7 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
 
       <div className="bg-white rounded-2xl p-5 shadow-sm space-y-4">
         <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Ubicación (opcional)</p>
-        <div className="grid grid-cols-2 gap-3">
-          {field('Latitud', latitud, setLatitud, { type: 'number', placeholder: '-31.4135' })}
-          {field('Longitud', longitud, setLongitud, { type: 'number', placeholder: '-64.1811' })}
-        </div>
+        <LocationPicker value={location} onChange={setLocation} />
       </div>
 
       <button
