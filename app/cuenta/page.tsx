@@ -44,6 +44,12 @@ export default function CuentaPage() {
       >
         Cerrar sesión
       </button>
+
+      <div className="mt-8 text-center">
+        <Link href="/admin/login" className="text-xs text-gray-400 hover:text-gray-600">
+          ¿Sos propietario? Ingresá acá
+        </Link>
+      </div>
     </div>
   )
 }
