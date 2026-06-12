@@ -55,13 +55,16 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
       <div className="px-5 pt-5 pb-24">
         {/* Info */}
         <h1 className="text-2xl font-bold text-[#4A3020]">{quinta.nombre}</h1>
-        <div className="flex justify-between items-center mt-1.5 mb-4">
+        <div className="flex justify-between items-center mt-1.5 mb-2">
           <p className="text-sm text-[#7A6559]">📍 {quinta.direccion ?? 'Córdoba, Argentina'}</p>
           <p className="text-sm font-semibold text-[#2C1810]">
             ⭐ {opinionesData.promedio > 0 ? opinionesData.promedio.toFixed(1) : '—'}
             {' '}({opinionesData.opiniones.length})
           </p>
         </div>
+        <p className="text-sm text-[#7A6559] mb-4">
+          🕐 Horario: {quinta.horaInicio && quinta.horaFin ? `${quinta.horaInicio} – ${quinta.horaFin}` : '10:00 – 19:00'}
+        </p>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-5">

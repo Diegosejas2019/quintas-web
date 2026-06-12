@@ -13,6 +13,8 @@ export interface QuintaFormData {
   amenities?: string[]
   latitud?: number
   longitud?: number
+  horaInicio?: string
+  horaFin?: string
 }
 
 export const getQuintasAdmin = async (): Promise<Quinta[]> => {

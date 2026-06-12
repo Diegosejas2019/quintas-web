@@ -15,6 +15,8 @@ export interface Quinta {
   direccion?: string;
   latitud?: number;
   longitud?: number;
+  horaInicio?: string;
+  horaFin?: string;
 }
 
 export interface DisponibilidadResponse {

@@ -24,6 +24,8 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
   const [amenitiesRaw, setAmenitiesRaw] = useState((initial?.amenities ?? []).join(', '))
   const [pileta, setPileta] = useState(initial?.pileta ?? false)
   const [parrilla, setParrilla] = useState(initial?.parrilla ?? false)
+  const [horaInicio, setHoraInicio] = useState(initial?.horaInicio ?? '')
+  const [horaFin, setHoraFin] = useState(initial?.horaFin ?? '')
   const [location, setLocation] = useState({
     lat: initial?.latitud ?? 0,
     lng: initial?.longitud ?? 0,
@@ -44,6 +46,8 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
       parrilla,
       latitud: location.lat || undefined,
       longitud: location.lng || undefined,
+      horaInicio: horaInicio || undefined,
+      horaFin: horaFin || undefined,
     })
   }
 
@@ -116,6 +120,31 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
             className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C4633A]/30"
           />
         </div>
+      </div>
+
+      <div className="bg-white rounded-2xl p-5 shadow-sm space-y-4">
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Horario de ocupación (opcional)</p>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 mb-1">Hora de ingreso</label>
+            <input
+              type="time"
+              value={horaInicio}
+              onChange={e => setHoraInicio(e.target.value)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C4633A]/30"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-500 mb-1">Hora de salida</label>
+            <input
+              type="time"
+              value={horaFin}
+              onChange={e => setHoraFin(e.target.value)}
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C4633A]/30"
+            />
+          </div>
+        </div>
+        <p className="text-xs text-gray-400">Si no se especifica, se mostrará el horario default (10:00 – 19:00)</p>
       </div>
 
       <div className="bg-white rounded-2xl p-5 shadow-sm space-y-4">
