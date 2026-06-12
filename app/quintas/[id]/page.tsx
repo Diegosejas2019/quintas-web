@@ -5,6 +5,7 @@ import { getOpiniones } from '@/api/opiniones'
 import OpinionesList from '@/components/OpinionesList'
 import QuintaDetailClient from '@/components/QuintaDetailClient'
 import DetailActions from '@/components/DetailActions'
+import ImageCarousel from '@/components/ImageCarousel'
 import { AMENITY_MAP } from '@/lib/amenities'
 
 const EMOJIS = ['🌳', '🌿', '🏡', '🌲', '🏠']
@@ -40,14 +41,15 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
     <div className="max-w-2xl mx-auto">
       {/* Hero */}
       <div className="h-64 bg-[#6B4C35] flex items-center justify-center relative overflow-hidden">
-        {quinta.imagenes?.[0]
-          ? <img src={quinta.imagenes[0]} alt={quinta.nombre} className="absolute inset-0 w-full h-full object-cover" />
-          : <span style={{ fontSize: 80 }}>{emoji}</span>
-        }
+        <ImageCarousel
+          imagenes={quinta.imagenes ?? []}
+          nombre={quinta.nombre}
+          fallback={<span style={{ fontSize: 80 }}>{emoji}</span>}
+        />
         <Link href="/"
-          className="absolute top-4 left-4 bg-white/90 rounded-full w-10 h-10 flex items-center justify-center text-lg hover:bg-white"
+          className="absolute top-4 left-4 bg-white/90 rounded-full w-10 h-10 flex items-center justify-center text-lg hover:bg-white z-10"
         >←</Link>
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-4 right-4 z-10">
           <DetailActions quinta={quinta} />
         </div>
       </div>
