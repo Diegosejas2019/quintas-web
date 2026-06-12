@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { MessageCircle, Bell } from 'lucide-react'
 import { useUIStore } from '@/store/uiStore'
 
 export default function AppHeader() {
@@ -14,12 +15,12 @@ export default function AppHeader() {
           type="button"
           aria-label="Mensajes"
           onClick={() => addToast('Mensajes — próximamente', 'info')}
-          className="text-[#7A6559] hover:text-[#4A3020] transition-colors text-xl"
+          className="text-[#7A6559] hover:text-[#4A3020] transition-colors"
         >
-          💬
+          <MessageCircle size={20} strokeWidth={1.8} />
         </button>
-        <Link href="/mis-alertas" aria-label="Notificaciones" className="text-[#7A6559] hover:text-[#4A3020] transition-colors text-xl">
-          🔔
+        <Link href="/mis-alertas" aria-label="Notificaciones" className="text-[#7A6559] hover:text-[#4A3020] transition-colors">
+          <Bell size={20} strokeWidth={1.8} />
         </Link>
       </div>
     </header>

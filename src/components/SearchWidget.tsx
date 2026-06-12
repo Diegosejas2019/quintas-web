@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { DayPicker } from 'react-day-picker'
 import type { DateRange } from 'react-day-picker'
 import { es } from 'date-fns/locale'
+import { Search, CalendarRange, Users } from 'lucide-react'
 import type { EstefindeFilters } from '@/types/types'
 
 interface Props {
@@ -57,7 +58,7 @@ export default function SearchWidget({ onSearch }: Props) {
     <div className="bg-white rounded-2xl shadow-sm border border-[#E8DDD4] overflow-visible mb-4">
       {/* Fila 1: Destino */}
       <div className="flex items-center gap-3 px-4 py-3 border-b border-[#E8DDD4]">
-        <span className="text-base text-[#7A6559]">🔍</span>
+        <Search size={16} strokeWidth={1.8} className="text-[#7A6559] flex-shrink-0" />
         <input
           type="text"
           value={query}
@@ -77,7 +78,7 @@ export default function SearchWidget({ onSearch }: Props) {
           onClick={() => setShowCal(v => !v)}
           className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors"
         >
-          <span className="text-base text-[#7A6559]">📅</span>
+          <CalendarRange size={16} strokeWidth={1.8} className="text-[#7A6559] flex-shrink-0" />
           <span className={`text-sm ${range?.from ? 'text-[#2C1810]' : 'text-[#7A6559]'}`}>
             {formatRange(range)}
           </span>
@@ -109,7 +110,7 @@ export default function SearchWidget({ onSearch }: Props) {
 
       {/* Fila 3: Capacidad */}
       <div className="flex items-center gap-3 px-4 py-3">
-        <span className="text-base text-[#7A6559]">👥</span>
+        <Users size={16} strokeWidth={1.8} className="text-[#7A6559] flex-shrink-0" />
         <select
           value={capIdx}
           onChange={e => setCapIdx(Number(e.target.value))}
