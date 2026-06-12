@@ -7,4 +7,6 @@ export const AMENITY_MAP: Record<string, { emoji: string; label: string }> = {
   estacionamiento: { emoji: '🚗', label: 'Estacionamiento' },
   wifi:            { emoji: '📶', label: 'Wi-Fi' },
   habitaciones:    { emoji: '🛏', label: 'Habitaciones' },
+  fiestas:         { emoji: '🎉', label: 'Fiestas nocturnas' },
+  eventos:         { emoji: '📅', label: 'Eventos' },
 }

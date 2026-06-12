@@ -34,8 +34,10 @@ export default function HomePage() {
   const [query, setQuery]         = useState('')
   const [pileta, setPileta]       = useState(false)
   const [parrilla, setParrilla]   = useState(false)
-  const [quincho, setQuincho]     = useState(false)
+  const [quincho, setQuincho]       = useState(false)
   const [paraChicos, setParaChicos] = useState(false)
+  const [fiestas, setFiestas]       = useState(false)
+  const [eventos, setEventos]       = useState(false)
   const [capIdx, setCapIdx]       = useState(0)
   const [pxIdx, setPxIdx]         = useState(0)
 
@@ -58,6 +60,8 @@ export default function HomePage() {
       if (q && !quinta.nombre.toLowerCase().includes(q) && !(quinta.direccion ?? '').toLowerCase().includes(q)) return false
       if (quincho    && !quinta.amenities?.includes('quincho'))       return false
       if (paraChicos && !quinta.amenities?.includes('juegos_jardin')) return false
+      if (fiestas    && !quinta.amenities?.includes('fiestas'))       return false
+      if (eventos    && !quinta.amenities?.includes('eventos'))       return false
       return true
     })
   }, [data?.quintas, query, quincho, paraChicos])
@@ -100,6 +104,8 @@ export default function HomePage() {
         <ToggleChip label="🔥 Parrilla"  active={parrilla}  onClick={() => setParrilla(v => !v)} />
         <ToggleChip label="🏠 Quincho"   active={quincho}   onClick={() => setQuincho(v => !v)} />
         <ToggleChip label="🛝 Para chicos" active={paraChicos} onClick={() => setParaChicos(v => !v)} />
+        <ToggleChip label="🎉 Fiestas"    active={fiestas}    onClick={() => setFiestas(v => !v)} />
+        <ToggleChip label="📅 Eventos"    active={eventos}    onClick={() => setEventos(v => !v)} />
         <div className="w-px bg-[#E8DDD4] mx-1 self-stretch" />
         {CAPACIDADES.map((c, i) => (
           <SelectChip key={c.label} label={c.label} active={capIdx === i} onClick={() => setCapIdx(i)} />
@@ -136,7 +142,7 @@ export default function HomePage() {
               : 'Todas las quintas están reservadas con esos filtros.'}
           </p>
           <button
-            onClick={() => { setQuery(''); setPileta(false); setParrilla(false); setQuincho(false); setParaChicos(false); setCapIdx(0); setPxIdx(0) }}
+            onClick={() => { setQuery(''); setPileta(false); setParrilla(false); setQuincho(false); setParaChicos(false); setFiestas(false); setEventos(false); setCapIdx(0); setPxIdx(0) }}
             className="border border-[#E8DDD4] bg-white text-[#4A3020] px-5 py-2 rounded-xl text-sm font-semibold"
           >
             Limpiar filtros

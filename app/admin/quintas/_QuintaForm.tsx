@@ -4,6 +4,7 @@ import type { QuintaFormData } from '@/api/admin/quintas'
 import type { Quinta } from '@/types/types'
 import { useState } from 'react'
 import ImageUploader from '@/components/admin/ImageUploader'
+import { AMENITY_MAP } from '@/lib/amenities'
 import dynamic from 'next/dynamic'
 const LocationPicker = dynamic(() => import('@/components/admin/LocationPicker'), { ssr: false })
 
@@ -21,7 +22,12 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
   const [precio, setPrecio] = useState(String(initial?.precioPorDia ?? ''))
   const [capacidad, setCapacidad] = useState(String(initial?.capacidad ?? ''))
   const [imagenes, setImagenes] = useState<string[]>(initial?.imagenes ?? [])
-  const [amenitiesRaw, setAmenitiesRaw] = useState((initial?.amenities ?? []).join(', '))
+  const [amenitiesSet, setAmenitiesSet] = useState<Set<string>>(new Set(initial?.amenities ?? []))
+  const toggleAmenity = (key: string) => setAmenitiesSet(prev => {
+    const next = new Set(prev)
+    next.has(key) ? next.delete(key) : next.add(key)
+    return next
+  })
   const [pileta, setPileta] = useState(initial?.pileta ?? false)
   const [parrilla, setParrilla] = useState(initial?.parrilla ?? false)
   const [horaInicio, setHoraInicio] = useState(initial?.horaInicio ?? '')
@@ -40,7 +46,7 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
       precioPorDia: Number(precio),
       capacidad: Number(capacidad),
       imagenes,
-      amenities: amenitiesRaw.split(',').map(s => s.trim()).filter(Boolean),
+      amenities: Array.from(amenitiesSet),
       direccion: location.direccion || undefined,
       pileta,
       parrilla,
@@ -110,16 +116,18 @@ export default function QuintaForm({ initial, onSubmit, isLoading, submitLabel, 
             <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${parrilla ? 'translate-x-6' : 'translate-x-0'}`} />
           </button>
         </div>
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 mb-1">Otros amenities (separados por coma)</label>
-          <input
-            type="text"
-            value={amenitiesRaw}
-            onChange={e => setAmenitiesRaw(e.target.value)}
-            placeholder="WiFi, Estacionamiento, Quincho cubierto"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C4633A]/30"
-          />
-        </div>
+        {Object.entries(AMENITY_MAP).map(([key, { emoji, label }]) => (
+          <div key={key} className="flex items-center justify-between">
+            <span className="text-sm font-medium text-[#2C1810]">{emoji} {label}</span>
+            <button
+              type="button"
+              onClick={() => toggleAmenity(key)}
+              className={`w-12 h-6 rounded-full transition-colors ${amenitiesSet.has(key) ? 'bg-[#C4633A]' : 'bg-gray-200'}`}
+            >
+              <div className={`w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${amenitiesSet.has(key) ? 'translate-x-6' : 'translate-x-0'}`} />
+            </button>
+          </div>
+        ))}
       </div>
 
       <div className="bg-white rounded-2xl p-5 shadow-sm space-y-4">
