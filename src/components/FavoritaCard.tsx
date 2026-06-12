@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { useFavoritesStore } from '@/store/favoritesStore'
 import { getOpiniones } from '@/api/opiniones'
+import { getQuintaById } from '@/api/quintas'
 import { checkDisponible } from '@/lib/checkDisponibilidad'
 import FavoriteDatePickerModal from '@/components/FavoriteDatePickerModal'
 import type { FavoriteItem } from '@/types/types'
@@ -37,6 +38,13 @@ export default function FavoritaCard({ item }: Props) {
     staleTime: 5 * 60 * 1000,
   })
 
+  const { data: quintaData } = useQuery({
+    queryKey: ['quinta', item.id],
+    queryFn: () => getQuintaById(item.id),
+    staleTime: 10 * 60 * 1000,
+    enabled: !imagenUrl,
+  })
+
   const handleConfirmarFechas = async (d: string, h: string) => {
     setDesde(d)
     setHasta(h)
@@ -59,6 +67,7 @@ export default function FavoritaCard({ item }: Props) {
     }
   }
 
+  const imagenUrl = imagenUrl ?? quintaData?.imagenes?.[0]
   const promedio = opinionesData?.promedio ?? 0
   const totalOpiniones = opinionesData?.opiniones.length ?? 0
 
@@ -69,9 +78,9 @@ export default function FavoritaCard({ item }: Props) {
         <div className="flex gap-3 p-3 cursor-pointer" onClick={handleCardClick}>
           {/* Thumbnail */}
           <div className="w-24 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-[#E8DDD4]">
-            {item.imagenUrl ? (
+            {imagenUrl ? (
               <Image
-                src={item.imagenUrl}
+                src={imagenUrl}
                 alt={item.nombre}
                 width={96}
                 height={80}
@@ -142,7 +151,7 @@ export default function FavoritaCard({ item }: Props) {
         <FavoriteDatePickerModal
           quintaId={item.id}
           quintaNombre={item.nombre}
-          imagenUrl={item.imagenUrl}
+          imagenUrl={imagenUrl}
           promedio={promedio}
           totalOpiniones={totalOpiniones}
           onClose={() => setShowModal(false)}

@@ -27,7 +27,7 @@ export default function FavoritosPage() {
 
   return (
     <div className="max-w-lg mx-auto px-4 py-6">
-      <h1 className="text-xl font-bold text-[#2C1810] mb-1">Alojamiento</h1>
+      <h1 className="text-xl font-bold text-[#2C1810] mb-1">Favoritos</h1>
       <p className="text-sm text-[#7A6559] mb-4">{items.length} alojamiento{items.length !== 1 ? 's' : ''} guardado{items.length !== 1 ? 's' : ''}</p>
 
       <div className="flex flex-col gap-3">
