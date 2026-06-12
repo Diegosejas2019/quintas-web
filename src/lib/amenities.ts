@@ -1,7 +1,7 @@
 export const AMENITY_MAP: Record<string, { emoji: string; label: string }> = {
   quincho:         { emoji: '🏠', label: 'Quincho' },
   pool:            { emoji: '🎱', label: 'Mesa de pool' },
-  metegol:         { emoji: '⚽', label: 'Metegol' },
+  metegol:         { emoji: '🕹️', label: 'Metegol' },
   ping_pong:       { emoji: '🏓', label: 'Ping pong' },
   juegos_jardin:   { emoji: '🛝', label: 'Juegos de jardín' },
   estacionamiento: { emoji: '🚗', label: 'Estacionamiento' },
@@ -9,4 +9,5 @@ export const AMENITY_MAP: Record<string, { emoji: string; label: string }> = {
   habitaciones:    { emoji: '🛏', label: 'Habitaciones' },
   fiestas:         { emoji: '🎉', label: 'Fiestas nocturnas' },
   eventos:         { emoji: '📅', label: 'Eventos' },
+  cancha_futbol:   { emoji: '⚽', label: 'Cancha de fútbol' },
 }
