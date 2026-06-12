@@ -15,7 +15,7 @@ export default function AdminQuintasPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-[#2C1810]">Mis quintas</h1>
+        <h1 className="text-xl font-bold text-[#2C1810]">Tus quintas</h1>
         <Link
           href="/admin/quintas/nueva"
           className="bg-[#C4633A] text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-[#b05530] transition-colors"

@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useState, useMemo } from 'react'
 import { getQuintas, getDisponiblesEnFechas } from '@/api/quintas'
 
-const LeafletMap = dynamic(() => import('@/components/LeafletMap'), { ssr: false })
+const GoogleMap = dynamic(() => import('@/components/GoogleMap'), { ssr: false })
 
 const RADIOS = [
   { label: '5 km',      value: 5 },
@@ -103,7 +103,7 @@ export default function MapaPage() {
 
       {/* Mapa */}
       <div className="flex-1">
-        <LeafletMap
+        <GoogleMap
           quintas={todasQuintas}
           disponiblesIds={disponiblesIds}
           radioKm={radioKm}

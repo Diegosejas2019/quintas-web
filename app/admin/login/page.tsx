@@ -27,8 +27,8 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-[#2C1810] mb-2">Panel de administración</h1>
-        <p className="text-sm text-gray-500 mb-8">Acceso para propietarios</p>
+        <h1 className="text-2xl font-bold text-[#2C1810] mb-2">Acceso propietarios</h1>
+        <p className="text-sm text-gray-500 mb-8">Ingresá con tu cuenta de propietario</p>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 shadow-sm space-y-4">
           <div>
