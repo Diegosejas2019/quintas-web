@@ -64,6 +64,16 @@ export default async function QuintaPage({ params }: { params: Promise<{ id: str
             {' '}({opinionesData.opiniones.length})
           </p>
         </div>
+        {quinta.latitud != null && quinta.longitud != null && (
+          <a
+            href={`https://maps.google.com/maps?daddr=${quinta.latitud},${quinta.longitud}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#C4633A] border border-[#C4633A]/30 bg-[#FDF3EE] rounded-full px-3 py-1.5 mb-3 hover:bg-[#FAE6DA] transition-colors"
+          >
+            📍 Cómo llegar
+          </a>
+        )}
         <p className="text-sm text-[#7A6559] mb-4">
           🕐 Horario: {quinta.horaInicio && quinta.horaFin ? `${quinta.horaInicio} – ${quinta.horaFin}` : '10:00 – 19:00'}
         </p>
