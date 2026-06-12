@@ -35,6 +35,8 @@ export interface EstefindeFilters {
   precioMax?: number;
   pileta?: boolean;
   parrilla?: boolean;
+  fechaInicio?: string; // ISO date string YYYY-MM-DD
+  fechaFin?: string;    // ISO date string YYYY-MM-DD
 }
 
 export interface PerfilUsuario {

@@ -13,10 +13,12 @@ export const getQuintaById = async (id: string): Promise<Quinta> => {
 
 export const getEsteFinde = async (filters: EstefindeFilters = {}): Promise<EstefindeResponse> => {
   const params: Record<string, string> = {}
-  if (filters.capacidad != null) params.capacidad = String(filters.capacidad)
-  if (filters.precioMax  != null) params.precioMax  = String(filters.precioMax)
-  if (filters.pileta     != null) params.pileta     = String(filters.pileta)
-  if (filters.parrilla   != null) params.parrilla   = String(filters.parrilla)
+  if (filters.capacidad   != null) params.capacidad   = String(filters.capacidad)
+  if (filters.precioMax   != null) params.precioMax   = String(filters.precioMax)
+  if (filters.pileta      != null) params.pileta      = String(filters.pileta)
+  if (filters.parrilla    != null) params.parrilla    = String(filters.parrilla)
+  if (filters.fechaInicio != null) params.fechaInicio = filters.fechaInicio
+  if (filters.fechaFin    != null) params.fechaFin    = filters.fechaFin
   const { data } = await apiClient.get('/quintas/este-finde', { params })
   return data
 }

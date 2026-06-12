@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/authStore'
 const TABS = [
   { href: '/',            icon: '🏠', label: 'Inicio' },
   { href: '/mapa',        icon: '🗺️', label: 'Mapa' },
-  { href: '/mis-alertas', icon: '🔔', label: 'Alertas' },
+  { href: '/favoritos',   icon: '♡',  label: 'Favoritos' },
   { href: '/mis-reservas', icon: '📋', label: 'Reservas' },
   { href: '/cuenta',      icon: '👤', label: 'Cuenta' },
 ]
