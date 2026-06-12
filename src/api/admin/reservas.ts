@@ -53,6 +53,10 @@ export const createReservaAdmin = async (body: CreateReservaAdminDto): Promise<{
   return data
 }
 
+export const confirmarReserva = async (id: string): Promise<void> => {
+  await apiClient.put(`/reservas/${id}/confirmar`)
+}
+
 export const cancelarReserva = async (id: string): Promise<void> => {
   await apiClient.put(`/reservas/${id}/cancelar`)
 }

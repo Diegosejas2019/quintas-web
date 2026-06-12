@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getReservasAdmin, cancelarReserva, finalizarReserva, registrarSena } from '@/api/admin/reservas'
+import { getReservasAdmin, cancelarReserva, confirmarReserva, finalizarReserva, registrarSena } from '@/api/admin/reservas'
 import type { RegistrarSenaDto } from '@/api/admin/reservas'
 
 const ESTADO_COLORS: Record<string, string> = {
@@ -32,6 +32,12 @@ export default function ReservaDetailPage() {
   })
 
   const reserva = reservas.find(r => r.id === id)
+
+  const confirmarMutation = useMutation({
+    mutationFn: () => confirmarReserva(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-reservas'] }),
+    onError: () => setError('Error al confirmar'),
+  })
 
   const cancelMutation = useMutation({
     mutationFn: () => cancelarReserva(id),
@@ -111,7 +117,7 @@ export default function ReservaDetailPage() {
         ) : (
           <div>
             <p className="text-sm text-gray-400 mb-3">No hay seña registrada</p>
-            {reserva.estado !== 'Cancelada' && reserva.estado !== 'Finalizada' && (
+            {(reserva.estado === 'Pendiente' || reserva.estado === 'Confirmada') && (
               <button
                 onClick={() => setShowSena(true)}
                 className="text-sm font-semibold text-[#C4633A] hover:underline"
@@ -125,13 +131,22 @@ export default function ReservaDetailPage() {
 
       {/* Actions */}
       {reserva.estado === 'Pendiente' && (
-        <button
-          onClick={() => confirm('¿Cancelar esta reserva?') && cancelMutation.mutate()}
-          disabled={cancelMutation.isPending}
-          className="w-full bg-red-50 text-red-600 rounded-xl py-3 font-semibold text-sm hover:bg-red-100 transition-colors mb-3"
-        >
-          Cancelar reserva
-        </button>
+        <div className="space-y-3 mb-3">
+          <button
+            onClick={() => confirmarMutation.mutate()}
+            disabled={confirmarMutation.isPending}
+            className="w-full bg-green-50 text-green-700 rounded-xl py-3 font-semibold text-sm hover:bg-green-100 transition-colors"
+          >
+            {confirmarMutation.isPending ? 'Aceptando...' : '✓ Aceptar reserva'}
+          </button>
+          <button
+            onClick={() => confirm('¿Cancelar esta reserva?') && cancelMutation.mutate()}
+            disabled={cancelMutation.isPending}
+            className="w-full bg-red-50 text-red-600 rounded-xl py-3 font-semibold text-sm hover:bg-red-100 transition-colors"
+          >
+            Cancelar reserva
+          </button>
+        </div>
       )}
       {reserva.estado === 'Confirmada' && (
         <div className="space-y-3">
@@ -143,11 +158,11 @@ export default function ReservaDetailPage() {
             {finalizarMutation.isPending ? 'Finalizando...' : 'Marcar finalizada'}
           </button>
           <button
-            onClick={() => confirm('¿Cancelar esta reserva?') && cancelMutation.mutate()}
+            onClick={() => confirm('¿Liberar fecha y cancelar esta reserva?') && cancelMutation.mutate()}
             disabled={cancelMutation.isPending}
             className="w-full bg-red-50 text-red-600 rounded-xl py-3 font-semibold text-sm hover:bg-red-100 transition-colors"
           >
-            Cancelar reserva
+            Liberar fecha / Cancelar
           </button>
         </div>
       )}
