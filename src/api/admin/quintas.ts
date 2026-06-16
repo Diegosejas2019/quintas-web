@@ -34,3 +34,7 @@ export const updateQuinta = async (id: string, body: QuintaFormData): Promise<vo
 export const deleteQuinta = async (id: string): Promise<void> => {
   await apiClient.delete(`/quintas/${id}`)
 }
+
+export const bloquearFechas = async (id: string, fechas: string[]): Promise<void> => {
+  await apiClient.patch(`/quintas/${id}/bloqueos`, { fechas })
+}

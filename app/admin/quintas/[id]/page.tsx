@@ -7,9 +7,10 @@ import { getQuintasAdmin, updateQuinta, deleteQuinta } from '@/api/admin/quintas
 import { getOpiniones } from '@/api/opiniones'
 import QuintaForm from '../_QuintaForm'
 import StarRating from '@/components/StarRating'
+import AdminCalendar from '@/components/admin/AdminCalendar'
 import type { QuintaFormData } from '@/api/admin/quintas'
 
-type Tab = 'datos' | 'opiniones'
+type Tab = 'datos' | 'opiniones' | 'disponibilidad'
 
 export default function EditQuintaPage() {
   const { id } = useParams<{ id: string }>()
@@ -67,7 +68,7 @@ export default function EditQuintaPage() {
 
       {/* Tabs */}
       <div className="flex gap-1 mb-6 border-b border-[#E8DDD4]">
-        {(['datos', 'opiniones'] as Tab[]).map(t => (
+        {(['datos', 'opiniones', 'disponibilidad'] as Tab[]).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -77,7 +78,7 @@ export default function EditQuintaPage() {
                 : 'border-transparent text-[#7A6559] hover:text-[#4A3020]'
             }`}
           >
-            {t === 'datos' ? 'Datos' : 'Opiniones'}
+            {t === 'datos' ? 'Datos' : t === 'opiniones' ? 'Opiniones' : 'Disponibilidad'}
           </button>
         ))}
       </div>
@@ -98,6 +99,11 @@ export default function EditQuintaPage() {
             }}
           />
         </>
+      )}
+
+      {/* Tab: Disponibilidad */}
+      {tab === 'disponibilidad' && (
+        <AdminCalendar quintaId={id} />
       )}
 
       {/* Tab: Opiniones */}

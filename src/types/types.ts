@@ -18,6 +18,7 @@ export interface Quinta {
   horaInicio?: string;
   horaFin?: string;
   telefono?: string | null;
+  fechasBloqueadas?: string[];
 }
 
 export interface Conversacion {
