@@ -23,7 +23,7 @@ export default function NuevaQuintaPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-[#2C1810] mb-6">Nueva quinta</h1>
+      <h1 className="text-2xl font-bold text-[#4A3020] mb-6">Nueva quinta</h1>
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <QuintaForm
         onSubmit={(data: QuintaFormData) => mutation.mutate(data)}

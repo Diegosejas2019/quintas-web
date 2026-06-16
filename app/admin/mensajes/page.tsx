@@ -28,8 +28,8 @@ export default function AdminMensajesPage() {
   const quintaActiva = selectedQuinta ?? quintas[0]?.id
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-6">
-      <h1 className="text-2xl font-bold text-[#2C1810] mb-4">Mensajes</h1>
+    <div className="max-w-lg mx-auto px-5 py-6">
+      <h1 className="text-2xl font-bold text-[#4A3020] mb-4">Mensajes</h1>
 
       {quintas.length > 1 && (
         <div className="flex gap-2 mb-4 flex-wrap">

@@ -13,8 +13,8 @@ export default function AdminDashboardPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#2C1810]">Bienvenido, propietario 👋</h1>
-        <p className="text-sm text-gray-500 mt-1">Resumen de tu operación</p>
+        <h1 className="text-2xl font-bold text-[#4A3020]">Bienvenido, propietario 👋</h1>
+        <p className="text-sm text-[#7A6559] mt-1">Resumen de tu operación</p>
       </div>
 
       {/* Ingresos */}
@@ -31,7 +31,7 @@ export default function AdminDashboardPage() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
-          { label: 'Quintas', value: data?.totalQuintas, color: '#2C1810' },
+          { label: 'Quintas', value: data?.totalQuintas, color: '#4A3020' },
           { label: 'Pendientes', value: data?.reservasPendientes, color: '#D97706' },
           { label: 'Confirmadas', value: data?.reservasConfirmadas, color: '#059669' },
           { label: 'Finalizadas', value: data?.reservasFinalizadas, color: '#4F46E5' },
@@ -46,7 +46,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <p className="text-base font-bold text-[#2C1810] mb-3">Acciones rápidas</p>
+      <p className="text-base font-bold text-[#4A3020] mb-3">Acciones rápidas</p>
       <div className="flex gap-3">
         <Link
           href="/admin/reservas/nueva"

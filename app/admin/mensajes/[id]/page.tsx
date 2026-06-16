@@ -43,7 +43,7 @@ export default function AdminConversacionPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto flex flex-col h-[calc(100dvh-64px)]">
+    <div className="max-w-2xl mx-auto flex flex-col h-[calc(100dvh-64px-56px)]">
       <div className="flex items-center gap-3 px-6 py-3 border-b border-[#E8DDD4] bg-white">
         <button onClick={() => router.back()} className="text-[#7A6559] hover:text-[#2C1810]">←</button>
         <span className="text-sm font-semibold text-[#2C1810]">Conversación</span>

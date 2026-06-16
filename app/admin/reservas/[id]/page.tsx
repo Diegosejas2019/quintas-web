@@ -6,11 +6,11 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getReservasAdmin, cancelarReserva, confirmarReserva, finalizarReserva, registrarSena } from '@/api/admin/reservas'
 import type { RegistrarSenaDto } from '@/api/admin/reservas'
 
-const ESTADO_COLORS: Record<string, string> = {
-  Pendiente: 'bg-yellow-100 text-yellow-700',
-  Confirmada: 'bg-green-100 text-green-700',
-  Finalizada: 'bg-blue-100 text-blue-700',
-  Cancelada: 'bg-gray-100 text-gray-500',
+const ESTADO_COLORS: Record<string, { bg: string; text: string }> = {
+  Pendiente:  { bg: '#FEF3C7', text: '#92400E' },
+  Confirmada: { bg: '#D1FAE5', text: '#065F46' },
+  Finalizada: { bg: '#F3F4F6', text: '#374151' },
+  Cancelada:  { bg: '#FEE2E2', text: '#991B1B' },
 }
 
 export default function ReservaDetailPage() {
@@ -73,7 +73,7 @@ export default function ReservaDetailPage() {
 
   if (isLoading) return (
     <div className="flex justify-center py-20">
-      <div className="w-8 h-8 border-4 border-[#C4633A] border-t-transparent rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-[#6B4C35] border-t-transparent rounded-full animate-spin" />
     </div>
   )
 
@@ -85,7 +85,7 @@ export default function ReservaDetailPage() {
     <div>
       <div className="flex items-center gap-3 mb-6">
         <button onClick={() => router.back()} className="text-[#C4633A] text-sm">← Volver</button>
-        <h1 className="text-xl font-bold text-[#2C1810]">Reserva</h1>
+        <h1 className="text-xl font-bold text-[#4A3020]">Reserva</h1>
       </div>
 
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -93,7 +93,10 @@ export default function ReservaDetailPage() {
       <div className="bg-white rounded-2xl p-5 shadow-sm space-y-3 mb-4">
         <div className="flex items-center justify-between">
           <p className="text-lg font-bold text-[#2C1810]">{reserva.nombreCliente}</p>
-          <span className={`text-xs px-2 py-1 rounded-full font-semibold ${ESTADO_COLORS[reserva.estado]}`}>{reserva.estado}</span>
+          <span
+            className="text-xs px-2 py-1 rounded-full font-semibold"
+            style={{ backgroundColor: ESTADO_COLORS[reserva.estado].bg, color: ESTADO_COLORS[reserva.estado].text }}
+          >{reserva.estado}</span>
         </div>
         <p className="text-sm text-gray-500">{reserva.nombreQuinta}</p>
         <div className="border-t border-gray-100 pt-3 space-y-1 text-sm">

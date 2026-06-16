@@ -62,7 +62,7 @@ export default function NuevaReservaPage() {
         {step === 2 && (
           <button onClick={() => setStep(1)} className="text-[#C4633A] text-sm">← Volver</button>
         )}
-        <h1 className="text-xl font-bold text-[#2C1810]">Nueva reserva</h1>
+        <h1 className="text-2xl font-bold text-[#4A3020]">Nueva reserva</h1>
         <span className="ml-auto text-xs text-gray-400">Paso {step} de 2</span>
       </div>
 

@@ -52,7 +52,7 @@ export default function EditQuintaPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-[#2C1810] mb-6">Editar {quinta.nombre}</h1>
+      <h1 className="text-2xl font-bold text-[#4A3020] mb-6">Editar {quinta.nombre}</h1>
       {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
       <QuintaForm
         initial={quinta}
