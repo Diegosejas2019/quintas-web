@@ -1,40 +1,58 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getMensajes, enviarMensaje, marcarLeida } from '@/api/conversaciones'
 import type { Mensaje } from '@/types/types'
 import { useAuthStore } from '@/store/authStore'
+import { useChatStream } from '@/hooks/useChatStream'
 
 interface Props {
   conversacionId: string
+  ultimoLeidoPorPropietario?: string | null
   onBack?: () => void
 }
 
-export default function ChatWindow({ conversacionId, onBack }: Props) {
+export default function ChatWindow({ conversacionId, ultimoLeidoPorPropietario, onBack }: Props) {
   const { user } = useAuthStore()
   const [texto, setTexto] = useState('')
+  const [mensajes, setMensajes] = useState<Mensaje[]>([])
+  const [leidoHasta, setLeidoHasta] = useState<string | null>(ultimoLeidoPorPropietario ?? null)
+  const [isLoading, setIsLoading] = useState(true)
   const bottomRef = useRef<HTMLDivElement>(null)
   const queryClient = useQueryClient()
 
-  const { data: mensajes = [], isLoading } = useQuery<Mensaje[]>({
-    queryKey: ['mensajes', conversacionId],
-    queryFn: () => getMensajes(conversacionId),
-    refetchInterval: 5000,
-  })
-
-  const enviar = useMutation({
-    mutationFn: (t: string) => enviarMensaje(conversacionId, t),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['mensajes', conversacionId] })
-      queryClient.invalidateQueries({ queryKey: ['misConversaciones'] })
-    },
-  })
-
   useEffect(() => {
+    setIsLoading(true)
+    getMensajes(conversacionId).then(ms => {
+      setMensajes(ms)
+      setIsLoading(false)
+    })
     marcarLeida(conversacionId).catch(() => {})
     queryClient.invalidateQueries({ queryKey: ['misConversaciones'] })
   }, [conversacionId, queryClient])
+
+  const onMensaje = useCallback((m: Mensaje) => {
+    setMensajes(prev => {
+      if (prev.some(x => x.id === m.id)) return prev
+      return [...prev, m]
+    })
+    marcarLeida(conversacionId).catch(() => {})
+  }, [conversacionId])
+
+  const onLeido = useCallback((_quien: string, timestamp: string) => {
+    setLeidoHasta(timestamp)
+  }, [])
+
+  useChatStream(conversacionId, { onMensaje, onLeido })
+
+  const enviar = useMutation({
+    mutationFn: (t: string) => enviarMensaje(conversacionId, t),
+    onSuccess: (nuevo) => {
+      setMensajes(prev => prev.some(x => x.id === nuevo.id) ? prev : [...prev, nuevo])
+      queryClient.invalidateQueries({ queryKey: ['misConversaciones'] })
+    },
+  })
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -46,6 +64,12 @@ export default function ChatWindow({ conversacionId, onBack }: Props) {
     if (!t) return
     setTexto('')
     enviar.mutate(t)
+  }
+
+  const getTilde = (m: Mensaje): string => {
+    if (m.remitenteId !== user?.id) return ''
+    if (!leidoHasta) return ' ✓'
+    return new Date(m.enviadoEn) <= new Date(leidoHasta) ? ' ✓✓' : ' ✓'
   }
 
   if (isLoading) return <div className="flex-1 flex items-center justify-center text-[#7A6559]">Cargando mensajes...</div>
@@ -67,6 +91,7 @@ export default function ChatWindow({ conversacionId, onBack }: Props) {
         )}
         {mensajes.map(m => {
           const esMio = m.remitenteId === user?.id
+          const tilde = getTilde(m)
           return (
             <div key={m.id} className={`flex ${esMio ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm ${
@@ -77,6 +102,7 @@ export default function ChatWindow({ conversacionId, onBack }: Props) {
                 <p className="leading-5">{m.texto}</p>
                 <p className={`text-[10px] mt-1 ${esMio ? 'text-white/60' : 'text-[#7A6559]'}`}>
                   {new Date(m.enviadoEn).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
+                  {tilde && <span className={tilde === ' ✓✓' ? 'text-blue-300' : ''}>{tilde}</span>}
                 </p>
               </div>
             </div>

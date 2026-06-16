@@ -36,7 +36,7 @@ export default function ChatPage() {
           <p className="text-xs text-[#7A6559]">Consulta al propietario</p>
         </div>
       </div>
-      <ChatWindow conversacionId={conversacion.id} />
+      <ChatWindow conversacionId={conversacion.id} ultimoLeidoPorPropietario={conversacion.ultimoLeidoPorPropietario} />
     </div>
   )
 }

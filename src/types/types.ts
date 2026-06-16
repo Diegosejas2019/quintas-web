@@ -31,6 +31,8 @@ export interface Conversacion {
   ultimoMensajeEn: string;
   totalMensajes: number;
   mensajesNoLeidos: number;
+  ultimoLeidoPorPropietario?: string | null;
+  ultimoLeidoPorCliente?: string | null;
 }
 
 export interface Mensaje {

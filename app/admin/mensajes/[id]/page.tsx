@@ -1,38 +1,58 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getMensajes, enviarMensaje, marcarLeida } from '@/api/admin/conversaciones'
-import { useAuthStore } from '@/store/authStore'
-import { useState } from 'react'
+import { useChatStream } from '@/hooks/useChatStream'
 import type { Mensaje } from '@/types/types'
 
 export default function AdminConversacionPage() {
   const { id } = useParams<{ id: string }>()
-  const { user } = useAuthStore()
   const router = useRouter()
   const queryClient = useQueryClient()
   const [texto, setTexto] = useState('')
+  const [mensajes, setMensajes] = useState<Mensaje[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [leidoHasta, setLeidoHasta] = useState<string | null>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
 
-  const { data: mensajes = [], isLoading } = useQuery<Mensaje[]>({
-    queryKey: ['admin-mensajes', id],
-    queryFn: () => getMensajes(id),
-    refetchInterval: 5000,
-  })
+  useEffect(() => {
+    setIsLoading(true)
+    getMensajes(id).then(ms => {
+      setMensajes(ms)
+      setIsLoading(false)
+    })
+    marcarLeida(id).catch(() => {})
+    queryClient.invalidateQueries({ queryKey: ['admin-conversaciones'] })
+  }, [id, queryClient])
+
+  const onMensaje = useCallback((m: Mensaje) => {
+    setMensajes(prev => {
+      if (prev.some(x => x.id === m.id)) return prev
+      return [...prev, m]
+    })
+    marcarLeida(id).catch(() => {})
+    queryClient.invalidateQueries({ queryKey: ['admin-conversaciones'] })
+  }, [id, queryClient])
+
+  const onLeido = useCallback((_quien: string, timestamp: string) => {
+    setLeidoHasta(timestamp)
+  }, [])
+
+  useChatStream(id, { onMensaje, onLeido })
 
   const enviar = useMutation({
     mutationFn: (t: string) => enviarMensaje(id, t),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-mensajes', id] })
+    onSuccess: (nuevo) => {
+      setMensajes(prev => prev.some(x => x.id === nuevo.id) ? prev : [...prev, nuevo])
       queryClient.invalidateQueries({ queryKey: ['admin-conversaciones'] })
     },
   })
 
   useEffect(() => {
-    marcarLeida(id).catch(() => {})
-    queryClient.invalidateQueries({ queryKey: ['admin-conversaciones'] })
-  }, [id, queryClient])
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [mensajes])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,6 +60,12 @@ export default function AdminConversacionPage() {
     if (!t) return
     setTexto('')
     enviar.mutate(t)
+  }
+
+  const getTilde = (m: Mensaje): string => {
+    if (m.remitenteRol !== 'Propietario') return ''
+    if (!leidoHasta) return ' ✓'
+    return new Date(m.enviadoEn) <= new Date(leidoHasta) ? ' ✓✓' : ' ✓'
   }
 
   return (
@@ -53,6 +79,7 @@ export default function AdminConversacionPage() {
         {isLoading && <p className="text-center text-sm text-[#7A6559]">Cargando...</p>}
         {mensajes.map(m => {
           const esMio = m.remitenteRol === 'Propietario'
+          const tilde = getTilde(m)
           return (
             <div key={m.id} className={`flex ${esMio ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm ${
@@ -63,11 +90,13 @@ export default function AdminConversacionPage() {
                 <p className="leading-5">{m.texto}</p>
                 <p className={`text-[10px] mt-1 ${esMio ? 'text-white/60' : 'text-[#7A6559]'}`}>
                   {new Date(m.enviadoEn).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
+                  {tilde && <span className={tilde === ' ✓✓' ? 'text-blue-300' : ''}>{tilde}</span>}
                 </p>
               </div>
             </div>
           )
         })}
+        <div ref={bottomRef} />
       </div>
 
       <form onSubmit={handleSubmit} className="flex items-center gap-2 px-6 py-3 border-t border-[#E8DDD4] bg-white">
